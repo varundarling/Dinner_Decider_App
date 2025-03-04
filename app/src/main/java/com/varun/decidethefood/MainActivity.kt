@@ -2,13 +2,12 @@ package com.varun.decidethefood
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
-import android.annotation.SuppressLint
-import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.ScaleAnimation
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
@@ -17,18 +16,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.varun.decidethefood.R.*
-import kotlin.random.Random
+
 
 class MainActivity : AppCompatActivity() {
-    val foodItems = arrayListOf<String>()
-    lateinit var foodTextView: TextView
+    private val foodItems = arrayListOf<String>()
+    private lateinit var foodTextView: TextView
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -38,14 +33,12 @@ class MainActivity : AppCompatActivity() {
         val selectedFoodTxt: TextView = findViewById(id.selectedFoodTxt)
         val addFoodTxt: EditText = findViewById(id.addFoodTxt)
         val addFoodBtn: Button = findViewById(id.addFoodBtn)
-        foodTextView = findViewById(R.id.foodTextView)
+        foodTextView = findViewById(id.foodTextView)
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
 
         decideBtn.setOnClickListener{
-//            val random = Random
-//            val randomFood =  random.nextInt(foodItems.count())
-//            selectedFoodTxt.text = foodItems[randomFood]
-            selectedFoodTxt.text = "Selecting food..." // Show loading text
+            if(foodItems.isNotEmpty()){
+            selectedFoodTxt.text = getString(string.selecting_food) // Show loading text
             progressBar.visibility = View.VISIBLE // Show loading animation
 
             val blinkAnimator = ObjectAnimator.ofFloat(selectedFoodTxt, "alpha", 0f, 1f).apply {
@@ -62,7 +55,23 @@ class MainActivity : AppCompatActivity() {
                 selectedFoodTxt.alpha = 0f
                 selectedFoodTxt.animate().alpha(1f).setDuration(500).start()
                 progressBar.visibility = View.GONE // Hide loading animation
+
+                // Start Zoom In & Out Animation
+                val zoomInOut = ScaleAnimation(
+                    1f, 1.5f, // Scale from normal to 1.5x size
+                    1f, 1.5f,
+                    Animation.RELATIVE_TO_SELF, 0.5f, // Pivot at center
+                    Animation.RELATIVE_TO_SELF, 0.5f
+                )
+                zoomInOut.duration = 500 // Animation duration
+                zoomInOut.repeatMode = Animation.REVERSE
+                zoomInOut.repeatCount = 1 // Zoom in and then zoom out
+
+                selectedFoodTxt.startAnimation(zoomInOut) // Start animation
             }, 2000)
+        }else {
+                Snackbar.make(selectedFoodTxt, "Please Add Food First", Snackbar.LENGTH_SHORT).show()
+            }
         }
 
         addFoodBtn.setOnClickListener {

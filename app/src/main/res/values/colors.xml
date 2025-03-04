@@ -5,4 +5,9 @@
     <color name = "blue">#B85E2497</color>
     <color name="blueButton">#D1FF0101</color>
     <color name="light_blue">#CADCF8</color>
+
+    <!-- Light Theme Colors -->
+    <color name="backgroundColor">@color/white</color>
+    <color name="textColor">@color/black</color>
+    <color name="buttonColor">@color/blueButton</color>
 </resources>

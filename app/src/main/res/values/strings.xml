@@ -2,4 +2,10 @@
     <string name="app_name">DecideTheFood</string>
     <string name="decide_the_food">Decide The Food</string>
     <string name="logo">Logo</string>
+    <string name="selecting_food">Selecting food...</string>
+    <string name="your_food">Your Food</string>
+    <string name="decide">DECIDE !</string>
+    <string name="add_new_food_item">Add new food item....</string>
+    <string name="add">ADD</string>
+    <string name="your_food_items_appear_here">Your Food Items appear here...</string>
 </resources>
